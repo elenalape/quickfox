@@ -10,7 +10,7 @@ block trip_content
 		p Search failed! Please try simpler search terms.
 	else
 
-		h2 Flights from "#{fields.out}" to "#{fields.dest}" on #{fields.date}
+		h2 Flights from "#{fields.out.PlaceName}" to "#{fields.dest.PlaceName}" on #{fields.date}
 		//- each user in guests
 		//-     li 
 		//-      | #{user.name} 

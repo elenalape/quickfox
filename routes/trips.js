@@ -149,15 +149,18 @@ router.post('/:id/search', checkTrip, function(req, res, next) {
 	var date = req.param('outdate');
 	
 
-	findDestinations(req, res, out, dest, function(outs, dests) {
-		if (outs === false) {
+	findDestinations(req, res, out, dest, function(out_ss, dest_ss) {
+		if (out_ss === false) {
 			res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, searchFailed:true});
 			return;
 		}
 
+		console.log("Outbound data:", out_ss)
+		console.log("Destination data:", dest_ss)
+
 		var fields = {
-			dest:dest,
-			out:out,
+			dest:dest_ss,
+			out:out_ss,
 			date:date
 		}
 		res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, fields:fields});
@@ -207,7 +210,7 @@ function findDestinations(req, res, out, dest, callback) {
 
 
 
-	    	console.log(destties.Places)
+	    	// console.log(destties.Places)
 
 	    	////////////////////////
 			request(
@@ -239,10 +242,10 @@ function findDestinations(req, res, out, dest, callback) {
 			    	}
 
 
-			    	console.log(outties.Places)
+			    	// console.log(outties.Places)
 
 			    	
-					callback(outties[0], destties[0]);
+					callback(outties.Places[0], destties.Places[0]);
 			  	}
 			)
 	  	}
