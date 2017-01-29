@@ -136,6 +136,28 @@ router.get('/:id/destinations', checkTrip, function(req, res, next) {
 
 
 
+router.post('/:id/adddest', checkTrip, function(req, res, next) {
+	db.none("insert into destinations (\"trip\", \"name\", \"price\",\"url\") values ($1,$2,$3,$4)", [req.trip.id, req.param("name"), req.param("price"),req.param('url')])
+	.then(function(data) {
+		res.redirect("/trips/"+req.trip.id+"/destinations")
+	})
+	.catch(function(error) {
+		res.send('error adding dest');
+		console.log(error)
+	})
+});
+
+// router.post('/:id/dedest', checkTrip, function(req, res, next) {
+// 	db.none("delete from destinations where id=$1", [rparseInt(req.param("dd"))])
+// 	.then(function(data) {
+// 		res.redirect("/trips/"+req.trip.id+"/destinations")
+// 	})
+// 	.catch(function(error) {
+// 		res.send('error delling guests');
+// 		console.log(error)
+// 	})
+// });
+
 
 
 
@@ -216,7 +238,7 @@ router.post('/:id/search', checkTrip, function(req, res, next) {
 			return;
 		}
 
-		setTimeout(startPolling, 1000, fields)
+		setTimeout(startPolling, 500, fields)
 	}
 
 	var findLeg = function(legs, id) {
@@ -263,7 +285,8 @@ router.post('/:id/search', checkTrip, function(req, res, next) {
 			var it = body.Itineraries[i]
 			rows.push({
 				price: it.PricingOptions.Price,
-				stops: it.segs - 2
+				stops: it.segs - 2,
+				url: it.PricingOptions.DeeplinkUrl
 			})
 		}
 

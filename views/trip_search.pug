@@ -1,24 +1,31 @@
 extends trip
 
 block trip_content
-	h2 Search for a Destination
-	include destination_search_form.pug
+    h2 Search for a Destination
+    include destination_search_form.pug
 
-	hr
+    hr
 
-	if searchFailed
-		p Search failed! Please try simpler search terms.
-	else
+    if searchFailed
+        p Search failed! Please try simpler search terms.
+    else
 
-		h2 Flights from "#{fields.out.PlaceName}" to "#{fields.dest.PlaceName}" on #{fields.date}
-		//- each user in guests
-		//-     li 
-		//-      | #{user.name} 
-		//-      if user.isMe
-		//-         | (you) 
-		//-      if user.isOwner
-		//-         | (owner)
-		pre #{jsbody}
+        h2 Flights from "#{fields.out.PlaceName}" to "#{fields.dest.PlaceName}" on #{fields.date}
+        //- each user in guests
+        //-     li 
+        //-      | #{user.name} 
+        //-      if user.isMe
+        //-         | (you) 
+        //-      if user.isOwner
+        //-         | (owner)
+        pre #{jsbody}
 
-		each row in rows
-			li £#{row.price} (#{row.stops} stops)
+        each row in rows
+            li
+                | £#{row.price} (#{row.stops} stops) 
+                form(method="post" action="/trips/"+trip.id+"/adddest/")
+                    input(name="name" value=fields.out.PlaceName style="display:none;")
+                    input(name="price" value=row.price style="display:none;")
+                    input(name="url" value=row.url style="display:none;")
+                    | 
+                    button(type="submit" class="btn btn-default") add
