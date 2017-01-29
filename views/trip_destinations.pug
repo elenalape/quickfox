@@ -11,7 +11,7 @@ block trip_content
     .cities
         each dest in destinations 
             h3 #{dest.name}
-            h4 #{dest.price}
+            h4 £#{dest.price}
             a.btn.btn-default(href=dest.url) Link
             hr
         else
