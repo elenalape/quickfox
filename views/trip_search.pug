@@ -6,6 +6,10 @@ block trip_content
 		input(name="dest" placeholder="destination name")
 		| 
 		button(type="submit") search
+
+	hr
+
+	h2 Results for "#{query}"
 	//- each user in guests
 	//-     li 
 	//-      | #{user.name} 
@@ -13,12 +17,3 @@ block trip_content
 	//-         | (you) 
 	//-      if user.isOwner
 	//-         | (owner)
-	
-	hr
-
-	h2 Saved Destinations
-
-	each val in []
-		p=val
-	else
-		p No destinations have been saved!

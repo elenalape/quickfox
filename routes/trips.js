@@ -110,4 +110,7 @@ router.get('/:id/destinations', checkTrip, function(req, res, next) {
 	res.render('trip_destinations', { title: 'Destinations', user: req.user, trip:req.trip });
 });
 
+router.post('/:id/search', checkTrip, function(req, res, next) {
+	res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, query: req.param("dest")});
+})
 module.exports = router;
