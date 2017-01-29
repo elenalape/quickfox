@@ -37,8 +37,8 @@ app.use(session(sess))
 app.use(function(req, res, next) {
 
 
-	if (req.session.uid == null) {
 		req.session.uid = 1;
+	if (req.session.uid == null) {
 		//// HARDCODE LOGIN ABOVE////////////////////////////////
 		next()
 		return;

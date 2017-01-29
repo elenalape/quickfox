@@ -1,9 +1,6 @@
-extends layout
+extends trip
 
-block content
-    h1 All about "#{trip.name}""
-    a(href="/auth/logout") Logout
-    hr
+block trip_content
     h2 Guests
     
     each user in guests
@@ -13,4 +10,5 @@ block content
             | (you) 
          if user.isOwner
             | (owner)
+    
     

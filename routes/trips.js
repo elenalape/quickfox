@@ -16,8 +16,15 @@ router.get('/', function(req, res, next) {
   // res.send('list trips');
 });
 
-router.get('/new', function(req, res, next) {
-  res.render('trips_new', { title: "New trip", user: req.user });
+router.post('/new', function(req, res, next) {
+	db.one("insert into trips (\"owner\", \"name\") values ($1, $2) returning id", [req.user.id, req.param("name")])
+	.then(function(data) {
+		res.redirect("/trips/"+data.id);
+	})
+	.catch(function(error) {
+		console.log(error);
+		res.send('error creating the shit')
+	})
 });
 
 var checkTrip = function(req, res, next) {
@@ -45,6 +52,17 @@ router.get('/:id/', checkTrip, function(req, res, next) {
 	res.redirect("/trips/"+req.params.id+"/guests")
 });
 
+router.post('/:id/archive', checkTrip, function(req, res, next) {
+	db.none("update trips set archived=not archived where id=$1", req.trip.id)
+	.then(function(data) {
+		res.redirect("/trips/"+req.trip.id)
+	})
+	.catch(function(error) {
+		console.log(error);
+		res.send('failed to flip archive state');
+	})
+})
+
 router.get('/:id/guests', checkTrip, function(req, res, next) {
   
 	db.any("select distinct on (users.id) users.* from users,trips,trips_guests where (trips.id=$1) AND ((trips.owner = users.id) or ((trips_guests.trip=$1)and(trips_guests.guest=users.id)))", req.trip.id)
@@ -58,7 +76,7 @@ router.get('/:id/guests', checkTrip, function(req, res, next) {
 				guest.isMe = true;
 			}
 		}
-  		res.render('trips_guests', { title: 'Your trips', user: req.user, trip:req.trip, guests:data });
+  		res.render('trip_guests', { title: 'Guests', user: req.user, trip:req.trip, guests:data });
 	})
 	.catch(function(error) {
 		res.send('error getting guests');
@@ -68,7 +86,7 @@ router.get('/:id/guests', checkTrip, function(req, res, next) {
 
 });
 router.get('/:id/destinations', checkTrip, function(req, res, next) {
-  res.send('trip ' + req.params.id + " destinations");
+	res.render('trip_destinations', { title: 'Destinations', user: req.user, trip:req.trip });
 });
 
 module.exports = router;
