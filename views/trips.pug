@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    h1= title
+    p
+    a(href="/auth/logout") Logout
+    p Welcome to #{title}
+    p You are logged in as #{user.name}
+    p Your email is #{user.email}
+    p Your uid is #{user.id}
+    br
+    h2 Your trips
+
+    h3 Active trips
+    ul
+    each trip in trips
+        if !trip.archived
+            li
+                a(href="/trips/"+trip.id) #{trip.name}
+    h3 Archived trips
+    ul
+    each trip in trips
+        if trip.archived
+            li
+                a(href="/trips/"+trip.id) #{trip.name}

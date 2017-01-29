@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1 All about "#{trip.name}""
+    a(href="/auth/logout") Logout
+    hr
+    h2 Guests
+    
+    each user in guests
+        li 
+         | #{user.name} 
+         if user.isMe
+            | (you) 
+         if user.isOwner
+            | (owner)
+    
