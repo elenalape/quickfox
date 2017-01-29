@@ -40,7 +40,7 @@ var checkTrip = function(req, res, next) {
 			next()
 		})
 		.catch(function(error) {
-			console.log(error)
+			console.log("not exist", error)
 			next('route')
 			return;
 		})
@@ -82,9 +82,30 @@ router.get('/:id/guests', checkTrip, function(req, res, next) {
 		res.send('error getting guests');
 		console.log(error)
 	})
-
-
 });
+
+router.post('/:id/guests/add', checkTrip, function(req, res, next) {
+	db.none("insert into trips_guests (\"trip\", \"guest\") values ($1,(select users.id from users where users.email=$2 limit 1))", [req.trip.id, req.param("email")])
+	.then(function(data) {
+		res.redirect("/trips/"+req.trip.id+"/guests")
+	})
+	.catch(function(error) {
+		res.send('error adding guest');
+		console.log(error)
+	})
+});
+
+router.get('/:id/guests/del/:gd', checkTrip, function(req, res, next) {
+	db.none("delete from trips_guests where trip=$1 and guest=$2", [req.trip.id, parseInt(req.params.gd)])
+	.then(function(data) {
+		res.redirect("/trips/"+req.trip.id+"/guests")
+	})
+	.catch(function(error) {
+		res.send('error delling guests');
+		console.log(error)
+	})
+});
+
 router.get('/:id/destinations', checkTrip, function(req, res, next) {
 	res.render('trip_destinations', { title: 'Destinations', user: req.user, trip:req.trip });
 });

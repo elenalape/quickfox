@@ -2,13 +2,13 @@ extends layout
 
 block content
     h4
-        a(href="/trips") back to trips 
-        | | 
-        a(href="/trips/"+trip.id+"/guests") guests 
-        | | 
-        a(href="/trips/"+trip.id+"/destinations") destinations 
-        | | 
-        a(href="/auth/logout") logout 
+        a(href="/trips") back to trips
+        |  | 
+        a(href="/trips/"+trip.id+"/guests") guests
+        |  | 
+        a(href="/trips/"+trip.id+"/destinations") destinations
+        |  | 
+        a(href="/auth/logout") logout
     h1 All about "#{trip.name}"
     p
         | This trip is 

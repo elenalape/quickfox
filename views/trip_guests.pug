@@ -2,13 +2,20 @@ extends trip
 
 block trip_content
     h2 Guests
-    
+
+    p
+        | New guest 
+        form(method="post" action="/trips/"+trip.id+"/guests/add")
+            input(name="email" placeholder="user email")
+            | 
+            button(type="submit") add guest
+
     each user in guests
         li 
-         | #{user.name} 
-         if user.isMe
-            | (you) 
-         if user.isOwner
-            | (owner)
-    
-    
+            | #{user.name} 
+            if user.isMe
+                | (you) 
+            if user.isOwner
+                | (owner)
+            else
+                a(href="/trips/"+trip.id+"/guests/del/"+user.id) ([del])
