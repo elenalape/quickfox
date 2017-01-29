@@ -2,17 +2,31 @@ var express = require('express');
 var router = express.Router();
 var db = express.db
 
-/* GET trips listing. */
-router.get('/', function(req, res, next) {
+var tripList = function(req, res, next, layout) {
 
 	db.any("select distinct on (trips.id) trips.* from users,trips,trips_guests where (users.id=$1) and ((trips.owner = users.id) or (trips_guests.trip=trips.id and trips_guests.guest=users.id))", req.user.id)
 	.then(function(data) {
-  		res.render('trips', { title: 'Your trips', user: req.user, trips:data });
+  		res.render(layout, { title: 'Your trips', user: req.user, trips:data });
 	})
 	.catch(function(error) {
 		res.send('error getting trips');
 		console.log(error)
 	})
+}
+
+/* GET trips listing. */
+router.get('/', function(req, res, next) {
+	tripList(req, res, next, "trips")
+  // res.send('list trips');
+});
+
+router.get('/current', function(req, res, next) {
+	tripList(req, res, next, "current")
+  // res.send('list trips');
+});
+
+router.get('/archive', function(req, res, next) {
+	tripList(req, res, next, "archive")
   // res.send('list trips');
 });
 
@@ -49,13 +63,13 @@ var checkTrip = function(req, res, next) {
 }
 
 router.get('/:id/', checkTrip, function(req, res, next) {
-	res.redirect("/trips/"+req.params.id+"/guests")
+	res.render('trip_plan', { title: 'Plan', user: req.user, trip:req.trip });
 });
 
 router.post('/:id/archive', checkTrip, function(req, res, next) {
 	db.none("update trips set archived=not archived where id=$1", req.trip.id)
 	.then(function(data) {
-		res.redirect("/trips/"+req.trip.id)
+		res.redirect("/trips/"+req.trip.id+"/guests")
 	})
 	.catch(function(error) {
 		console.log(error);
@@ -107,7 +121,16 @@ router.get('/:id/guests/del/:gd', checkTrip, function(req, res, next) {
 });
 
 router.get('/:id/destinations', checkTrip, function(req, res, next) {
-	res.render('trip_destinations', { title: 'Destinations', user: req.user, trip:req.trip });
+  
+	db.any("select * from destinations where trip=$1", req.trip.id)
+	.then(function(data) {
+		
+  		res.render('trip_destinations', { title: 'Destinations', user: req.user, trip:req.trip, destinations:data });
+	})
+	.catch(function(error) {
+		res.send('error getting dests');
+		console.log(error)
+	})
 });
 
 router.post('/:id/search', checkTrip, function(req, res, next) {

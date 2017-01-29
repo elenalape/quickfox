@@ -162,11 +162,30 @@ img {
     line-height: 45px;
 }
 
-.logo {
-    height: 50px;
-    margin-top: 0px;
-    margin-bottom: 10px;
-    width: 50px;
+.logintext {
+    font-family: 'Lato', sans-serif;
+    font-size: 25px;
+    color: black;
+}
+.reallogintext {
+    position: absolute;
+    font-family: 'Lato', sans-serif;
+    font-size: 25px;
+    color: black;
 }
 
+.profilelist {
+    list-style-type: none;
+}
 
+.profilepic {
+    width: 100px;
+    height: 100%;
+}
+
+.cities {
+    position: absolute;
+    font-family: 'Lato', sans-serif;
+    font-size: 40px;
+    color: black;
+}

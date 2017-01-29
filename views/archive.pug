@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    each trip in trips
+        if trip.archived
+            .col-lg-6
+                a(href="/trips/"+trip.id) 
+                    img(src='/malta.jpg')
+                    .imgtext #{trip.name}

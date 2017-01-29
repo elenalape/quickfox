@@ -37,7 +37,7 @@ body {
 }
 .login { 
 	position: absolute;
-	top: 50%;
+	top: 30%;
 	left: 50%;
 	margin: -150px 0 0 -150px;
 	width:300px;
@@ -73,4 +73,10 @@ input {
 }
 input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgba(255,255,255,0.2); }
 
+.logo {
+    height: 200px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    width: 200px;
+}
     

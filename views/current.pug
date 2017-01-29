@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    each trip in trips
+        if !trip.archived
+            .col-lg-8
+                a(href="/trips/"+trip.id) 
+                    img(src='/feb.jpg')
+                    .imgtext #{trip.name}

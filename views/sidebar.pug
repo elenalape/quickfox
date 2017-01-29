@@ -1,0 +1,39 @@
+#sidebar-wrapper
+  ul.sidebar-nav
+    li.sidebar-brand
+      a(href='/')
+        | QuickFox
+    li
+      a(href='/')
+        span.glyphicon.glyphicon-plus(aria-hidden='true')
+        |  New trip!
+    li
+      a(href='/trips')
+        strong MY PROFILE
+    li
+      a(href='/trips/current') Current trips
+    li
+      a(href='/trips/archive') Archive
+
+    if trip
+      li
+        a(href='/trips/'+trip.id)
+          strong PLAN GROUP TRIP
+      li
+        a(href='/trips/'+trip.id+'/guests') Guests
+      li
+        a(href="/trips/"+trip.id+"/destinations") Destinations
+    li
+      a(href='http://www.reddit.com/')
+        strong FIND FRIENDS
+    br
+    br
+    br
+    br
+    br
+    br
+    br
+    br
+    br
+    li
+      a(href='/auth/logout') Log out

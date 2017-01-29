@@ -1,14 +1,6 @@
 extends layout
 
 block content
-    h4
-        a(href="/trips") back to trips
-        |  | 
-        a(href="/trips/"+trip.id+"/guests") guests
-        |  | 
-        a(href="/trips/"+trip.id+"/destinations") destinations
-        |  | 
-        a(href="/auth/logout") logout
     h1 All about "#{trip.name}"
     p
         | This trip is 
@@ -17,9 +9,9 @@ block content
         | archived.
 
         form(method="post" action="/trips/"+trip.id+"/archive" style="display:inline;")
-            button(type="submit")
+            button(type="submit" class="btn btn-default")
                 if trip.archived
                     | un
                 | archive
-    hr
+
     block trip_content

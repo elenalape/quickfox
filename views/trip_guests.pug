@@ -1,21 +1,22 @@
 extends trip
 
 block trip_content
-    h2 Guests
-
-    p
-        | New guest 
-        form(method="post" action="/trips/"+trip.id+"/guests/add")
-            input(name="email" placeholder="user email")
-            | 
-            button(type="submit") add guest
-
-    each user in guests
-        li 
-            | #{user.name} 
-            if user.isMe
-                | (you) 
-            if user.isOwner
-                | (owner)
-            else
-                a(href="/trips/"+trip.id+"/guests/del/"+user.id) ([del])
+    .profiletext Invite your friends to go on a trip!
+    hr
+    .logintext Add registered users by email:
+    form(method="post" action="/trips/"+trip.id+"/guests/add")
+        input(name="email" placeholder="user email")
+        | 
+        button(type="submit" class="btn btn-default") find friends
+    hr
+    .profiletext Already accepted your invitation:
+    ul
+        each user in guests
+            li.logintext
+                | #{user.name} 
+                if user.isMe
+                    | (you) 
+                if user.isOwner
+                    | (owner)
+                else
+                    a(href="/trips/"+trip.id+"/guests/del/"+user.id class='btn btn-sm btn-primary') x

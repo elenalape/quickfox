@@ -1,33 +1,27 @@
 extends layout
 
 block content
-    h1= title
-    p
-    a(href="/auth/logout") Logout
-    p Welcome to #{title}
-    p You are logged in as #{user.name}
-    p Your email is #{user.email}
-    p Your uid is #{user.id}
-    
-    br
-    h2 New trip
-    form(method="post" action="/trips/new")
-        input(name="name" placeholder="trip name")
-        | 
-        button(type="submit") create trip
-    
-    br
-    h2 Your trips
-
-    h3 Active trips
-    ul
-    each trip in trips
-        if !trip.archived
-            li
-                a(href="/trips/"+trip.id) #{trip.name}
-    h3 Archived trips
-    ul
-    each trip in trips
-        if trip.archived
-            li
-                a(href="/trips/"+trip.id) #{trip.name}
+    .logintext
+        img.profilepic(src='profilepic.png')
+        br
+        |                             Welcome to your profile.
+        br
+        |                             Your are logged in as #{user.name}.
+        br
+        |                             Your email is: #{user.email}
+        br
+        |                             Your ID is: #{user.id}
+        br
+        hr
+        .profiletext
+            | Create a new trip: 
+        
+        form(method="post" action="/trips/new")
+            input(name="name" placeholder="trip name")
+            | 
+            button(type="submit" clas="btn btn-default") Create
+        hr
+        a.profiletext(href='/trips/current') Current trips
+        hr
+        a.profiletext(href='/trips/archive') Archive
+        hr
