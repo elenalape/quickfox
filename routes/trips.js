@@ -147,16 +147,16 @@ router.post('/:id/adddest', checkTrip, function(req, res, next) {
 	})
 });
 
-// router.post('/:id/dedest', checkTrip, function(req, res, next) {
-// 	db.none("delete from destinations where id=$1", [rparseInt(req.param("dd"))])
-// 	.then(function(data) {
-// 		res.redirect("/trips/"+req.trip.id+"/destinations")
-// 	})
-// 	.catch(function(error) {
-// 		res.send('error delling guests');
-// 		console.log(error)
-// 	})
-// });
+router.get('/:id/dedest/:dd', checkTrip, function(req, res, next) {
+	db.none("delete from destinations where id=$1", [parseInt(req.params.dd)])
+	.then(function(data) {
+		res.redirect("/trips/"+req.trip.id+"/destinations")
+	})
+	.catch(function(error) {
+		res.send('error delling guests');
+		console.log(error)
+	})
+});
 
 
 
