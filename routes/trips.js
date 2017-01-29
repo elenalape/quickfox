@@ -191,14 +191,17 @@ router.post('/:id/search', checkTrip, function(req, res, next) {
 		console.log("Outbound data:", out_ss)
 		console.log("Destination data:", dest_ss)
 
+		// console.log(out_ss)
+		// return;
+
 		request.post({url:'http://partners.api.skyscanner.net/apiservices/pricing/v1.0', form: {
 			cabinclass:"Economy",
 			country:"UK",
 			currency:'GBP',
 			locale:'en-GB',
 			locationSchema:'iata',
-			originplace:"EDI",
-			destinationplace:"LHR",
+			originplace:out_ss.PlaceId,
+			destinationplace:dest_ss.PlaceId,
 			outbounddate:"2017-05-30",
 			inbounddate:"2017-06-02",
 			adults:1,

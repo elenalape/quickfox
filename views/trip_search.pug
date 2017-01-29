@@ -18,13 +18,13 @@ block trip_content
         //-         | (you) 
         //-      if user.isOwner
         //-         | (owner)
-        pre #{jsbody}
+        //- pre #{jsbody}
 
         each row in rows
             li
                 | £#{row.price} (#{row.stops} stops) 
                 form(method="post" action="/trips/"+trip.id+"/adddest/")
-                    input(name="name" value=fields.out.PlaceName style="display:none;")
+                    input(name="name" value=fields.out.PlaceName + " to " + fields.dest.PlaceName style="display:none;")
                     input(name="price" value=row.price style="display:none;")
                     input(name="url" value=row.url style="display:none;")
                     | 
