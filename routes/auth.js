@@ -37,7 +37,21 @@ router.get('/logout', function(req, res, next) {
 });
 
 router.get('/register', function(req, res, next) {
-  res.send('register');
+  res.render('register', { title: 'Register' });
 });
+
+router.post('/register', function(req, res, next) {
+	var email = req.param("email")
+	var realname = req.param("realname")
+	var password = req.param("password")
+	db.one("insert into users (\"email\", \"name\", \"password\") values ($1, $2, $3) returning id", [email, realname, password])
+	.then(function(data) {
+		res.redirect("/trips/");
+	})
+	.catch(function(error) {
+		console.log(error);
+		res.send('error creating the shit')
+	})	
+})
 
 module.exports = router;
