@@ -1,24 +1,18 @@
 extends trip
 
 block trip_content
-	h2 Search for a Destination
-	form(action="/trips/"+trip.id+"/search", method="post")
-		input(name="dest" placeholder="destination name")
-		| 
-		button(type="submit") search
-	//- each user in guests
-	//-     li 
-	//-      | #{user.name} 
-	//-      if user.isMe
-	//-         | (you) 
-	//-      if user.isOwner
-	//-         | (owner)
-	
-	hr
-
-	h2 Saved Destinations
-
-	each val in []
-		p=val
-	else
-		p No destinations have been saved!
+    .profiletext Destinations
+    hr
+    input
+    | 
+    a.btn.btn-default(href='#menu-toggle') Search
+    hr
+    h3.profiletext Saved searches
+    .cities
+        each dest in destinations 
+            h3 #{dest.name}
+            h4 #{dest.price}
+            a.btn.btn-default(href=dest.url) Link
+            hr
+        else
+            h4 Search for your first destination above!
