@@ -144,10 +144,10 @@ router.get('/:id/destinations', checkTrip, function(req, res, next) {
 
 
 router.post('/:id/search', checkTrip, function(req, res, next) {
+	console.log("Searching.......")
 	var dest = req.param('destination');
 	var out = req.param("outbound");
 	var date = req.param('outdate');
-	
 
 	findDestinations(req, res, out, dest, function(out_ss, dest_ss) {
 		if (out_ss === false) {
@@ -163,7 +163,31 @@ router.post('/:id/search', checkTrip, function(req, res, next) {
 			out:out_ss,
 			date:date
 		}
+
 		res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, fields:fields});
+
+		// request.post({url:'http://partners.api.skyscanner.net/apiservices/pricing/v1.0', form: {
+		// 	cabinclass:"Economy",
+		// 	country:"UK",
+		// 	currency:'GBP',
+		// 	locale:'en-GB',
+		// 	locationSchema:'iata',
+		// 	originplace:"EDI",
+		// 	destinationplace:"LHR",
+		// 	outbounddate:"2017-05-30",
+		// 	inbounddate:"2017-06-02",
+		// 	adults:1,
+		// 	apiKey: express.sskey
+
+		// }}, function(error, response,body){ /* ... */
+		// 	if (error || response.statusCode != 200) {
+		// 		res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, searchFailed:true});
+	 //  			return
+	 //  		}
+
+		// 	console.log("body is", body)
+		// 	res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, fields:fields});
+		// })
 	})
 })
 
