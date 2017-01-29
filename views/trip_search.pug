@@ -18,3 +18,7 @@ block trip_content
 		//-         | (you) 
 		//-      if user.isOwner
 		//-         | (owner)
+		pre #{jsbody}
+
+		each row in rows
+			li £#{row.price} (#{row.stops} stops)

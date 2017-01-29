@@ -159,14 +159,15 @@ router.post('/:id/search', checkTrip, function(req, res, next) {
 			return;
 		}
 
-		console.log("Outbound data:", out_ss)
-		console.log("Destination data:", dest_ss)
-
 		var fields = {
 			dest:dest_ss,
 			out:out_ss,
 			date:date
 		}
+		
+
+		console.log("Outbound data:", out_ss)
+		console.log("Destination data:", dest_ss)
 
 		request.post({url:'http://partners.api.skyscanner.net/apiservices/pricing/v1.0', form: {
 			cabinclass:"Economy",
@@ -188,10 +189,95 @@ router.post('/:id/search', checkTrip, function(req, res, next) {
 	  			return
 	  		}
 
-			console.log("body is", body)
-			res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, fields:fields});
+
+	  		fields.sessionKey = response.headers['location'];
+	  		console.log("sesskey", fields.sessionKey)
+
+	  		startPolling(fields)
+	  		
 		})
 	})
+
+	var startPolling = function(fields) {
+		request.get({url:fields.sessionKey+"?apiKey="+express.sskey+"&sortType=price&sortOrder=asc&pageIndex=0", json:true}, function(e,r,b){ 
+	  		keepPolling(e, r, b, fields) 
+  		})
+	}
+
+	var keepPolling = function(error, response, body, fields) {
+		console.log("polling...", response.statusCode)
+		if (error != null) {
+			failed()
+			return
+		}
+
+		if (response.statusCode === 200) {
+			finishedPolling(fields, body)
+			return;
+		}
+
+		setTimeout(startPolling, 1000, fields)
+	}
+
+	var findLeg = function(legs, id) {
+		for (var i = legs.length - 1; i >= 0; i--) {
+			var leg = legs[i];
+			if (leg.Id === id) {
+				return leg
+			}
+		}
+		return undefined;
+	}
+
+	var finishedPolling = function(fields, body) {
+		console.log("Result!", body)
+
+		var rows = []
+
+		// lets simplify our body a little bit
+		for (var i = body.Itineraries.length - 1; i >= 0; i--) {
+			var it = body.Itineraries[i]
+			it.PricingOptions = it.PricingOptions[0];
+			var segs = 0;
+			it.OutboundLegId = findLeg(body.Legs, it.OutboundLegId)
+			segs += it.OutboundLegId.SegmentIds.length
+
+			// var place = findLeg(body.Places, it.OutboundLegId.OriginStation)
+			// it.OutboundLegId.OriginStation = place.Name + " " + place.Type;
+			// place = findLeg(body.Places, it.OutboundLegId.DestinationStation)
+			// it.OutboundLegId.DestinationStation = place.Name + " " + place.Type;
+
+			it.InboundLegId = findLeg(body.Legs, it.InboundLegId)
+			segs += it.InboundLegId.SegmentIds.length
+
+			it.segs = segs
+			// place = findLeg(body.Places, it.InboundLegId.OriginStation)
+			// it.InboundLegId.OriginStation = place.Name + " " + place.Type;
+			// place = findLeg(body.Places, it.InboundLegId.DestinationStation)
+			// it.InboundLegId.DestinationStation = place.Name + " " + place.Type;
+		}
+
+		body.Itineraries = [body.Itineraries[0], body.Itineraries[1], body.Itineraries[2]]
+
+		for (var i = body.Itineraries.length - 1; i >= 0; i--) {
+			var it = body.Itineraries[i]
+			rows.push({
+				price: it.PricingOptions.Price,
+				stops: it.segs - 2
+			})
+		}
+
+		body.Legs = undefined;
+		body.Segments = undefined;
+		body.Carriers = undefined;
+		body.Agents = undefined;
+		// body.Places = undefined;
+		body.Currencies = undefined;
+
+
+
+		res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, fields:fields, rows:rows, jsbody:JSON.stringify(body)});
+	}
 })
 
 
