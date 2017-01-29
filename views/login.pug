@@ -1,24 +1,22 @@
-extends layout
-
-block content
-	h1= title
+doctype html
+html
+	head
+		meta(charset='UTF-8')
+		title QuickFox
+		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css')
+		link(href='/login.css', rel='stylesheet')
+		link(href='https://fonts.googleapis.com/css?family=Lobster', rel='stylesheet')
+		link(href='https://fonts.googleapis.com/css?family=Lato', rel='stylesheet')
+		script(src='https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js')
 	
-	form(method="post" action="")
-		input(name="email" placeholder="email")
-		input(name="password" type="password")
-		button(type="submit") lol
+	body
+		.login
+			.websitename QuickFox
 
-	//- <form>
-//-   <div class="form-group">
-//-     <label for="email">Email address:</label>
-//-     <input type="email" class="form-control" id="email">
-//-   </div>
-//-   <div class="form-group">
-//-     <label for="pwd">Password:</label>
-//-     <input type="password" class="form-control" id="pwd">
-//-   </div>
-//-   <div class="checkbox">
-//-     <label><input type="checkbox"> Remember me</label>
-//-   </div>
-//-   <button type="submit" class="btn btn-default">Submit</button>
-//- </form>
+			form(method='post' action='')
+				input(type='text', name='email', placeholder='Email address', required='required')
+				input(type='password', name='password', placeholder='Password', required='')
+				button.btn.btn-primary.btn-block.btn-large(type='submit') LOG IN
+				br
+				button.btn.btn-primary.btn-block.btn-large(type='submit') REGISTER
+				script(src='/js/index.js')
