@@ -3,9 +3,7 @@ extends trip
 block trip_content
     .profiletext Destinations
     hr
-    input
-    | 
-    a.btn.btn-default(href='#menu-toggle') Search
+    include destination_search_form.pug
     hr
     h3.profiletext Saved searches
     .cities

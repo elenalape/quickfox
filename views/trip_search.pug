@@ -2,18 +2,19 @@ extends trip
 
 block trip_content
 	h2 Search for a Destination
-	form(action="/trips/"+trip.id+"/search", method="post")
-		input(name="dest" placeholder="destination name")
-		| 
-		button(type="submit") search
+	include destination_search_form.pug
 
 	hr
 
-	h2 Results for "#{query}"
-	//- each user in guests
-	//-     li 
-	//-      | #{user.name} 
-	//-      if user.isMe
-	//-         | (you) 
-	//-      if user.isOwner
-	//-         | (owner)
+	if searchFailed
+		p Search failed! Please try simpler search terms.
+	else
+
+		h2 Flights from "#{fields.out}" to "#{fields.dest}" on #{fields.date}
+		//- each user in guests
+		//-     li 
+		//-      | #{user.name} 
+		//-      if user.isMe
+		//-         | (you) 
+		//-      if user.isOwner
+		//-         | (owner)

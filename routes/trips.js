@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = express.db
+var request = require('request');
 
 var tripList = function(req, res, next, layout) {
 
@@ -133,7 +134,118 @@ router.get('/:id/destinations', checkTrip, function(req, res, next) {
 	})
 });
 
+
+
+
+
+
+
+///// shitty searching code heree
+
+
 router.post('/:id/search', checkTrip, function(req, res, next) {
-	res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, query: req.param("dest")});
+	var dest = req.param('destination');
+	var out = req.param("outbound");
+	var date = req.param('outdate');
+	
+
+	findDestinations(req, res, out, dest, function(outs, dests) {
+		if (outs === false) {
+			res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, searchFailed:true});
+			return;
+		}
+
+		var fields = {
+			dest:dest,
+			out:out,
+			date:date
+		}
+		res.render('trip_search', {title: "Search destinations", user: req.user, trip:req.trip, fields:fields});
+	})
 })
+
+
+
+
+
+
+
+
+
+// shitty code galore
+function findDestinations(req, res, out, dest, callback) {
+	var outties = null;
+	var destties = null;
+
+	request(
+		"http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/UK/GBP/en-GB?query="
+		+ encodeURIComponent(dest) + "&apiKey=" + express.sskey,
+
+		function (error, response, body) {
+	  		if (error || response.statusCode != 200) {
+	  			callback(false);
+	  			return
+	  		}
+
+	    	console.log("Destination code", body) // Show the HTML for the Google homepage. 
+
+	    	destties = JSON.parse(body)
+	    	if (destties == null) {
+				callback(false);
+	    		return
+	    	}
+
+	    	if (destties.Places == null) {
+				callback(false);
+	    		return
+	    	}
+
+	    	if (destties.Places[0] == null) {
+				callback(false);
+	    		return
+	    	}
+
+
+
+	    	console.log(destties.Places)
+
+	    	////////////////////////
+			request(
+				"http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/UK/GBP/en-GB?query="
+				+ encodeURIComponent(out) + "&apiKey=" + express.sskey,
+
+				function (error, response, body) {
+			  		if (error || response.statusCode != 200) {
+			  			callback(false);
+			  			return
+			  		}
+
+			    	console.log("Outbound code", body) // Show the HTML for the Google homepage. 
+
+			    	outties = JSON.parse(body)
+			    	if (outties == null) {
+						callback(false);
+			    		return
+			    	}
+
+			    	if (outties.Places == null) {
+						callback(false);
+			    		return
+			    	}
+
+			    	if (outties.Places[0] == null) {
+						callback(false);
+			    		return
+			    	}
+
+
+			    	console.log(outties.Places)
+
+			    	
+					callback(outties[0], destties[0]);
+			  	}
+			)
+	  	}
+	)
+}
 module.exports = router;

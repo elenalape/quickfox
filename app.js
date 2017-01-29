@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var pgp = require('pg-promise')(/*options*/)
 
 var db = pgp(require('./private.db.js'))
+
+express.sskey = require("./private.ss.js")
 express.db = db
 var index = require('./routes/index');
 var auth = require('./routes/auth');
