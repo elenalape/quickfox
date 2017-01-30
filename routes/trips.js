@@ -286,11 +286,15 @@ router.post('/:id/search', checkTrip, function(req, res, next) {
 
 		for (var i = body.Itineraries.length - 1; i >= 0; i--) {
 			var it = body.Itineraries[i]
-			rows.push({
-				price: it.PricingOptions.Price,
-				stops: it.segs - 2,
-				url: it.PricingOptions.DeeplinkUrl
-			})
+			if (it != null) {
+				if (it.PricingOptions != null) {
+					rows.push({
+						price: it.PricingOptions.Price,
+						stops: it.segs - 2,
+						url: it.PricingOptions.DeeplinkUrl
+					})
+				}
+			}
 		}
 
 		body.Legs = undefined;
