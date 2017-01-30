@@ -5,8 +5,14 @@ The app allows you to search for cheap fligts with your friends, organise trips 
 
 Entry for the _HackCambridge Recurse_ Skyscanner prize. Check out our Devpost [here:](https://devpost.com/software/quickfox-cms7ar)
 
-### To start:
-`$ DEBUG=quickfox:\* npm start`
+### Getting started
+Use `npm install` to install dependencies. Then run the following command to get things running. 
+
+```
+$ DEBUG=quickfox:* npm start
+```
+
+Database schema coming soon.
 
 #### Contributors:
 * [Qais "qaisjp" Patankar](http://github.com/qaisjp)
